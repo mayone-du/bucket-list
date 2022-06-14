@@ -1,10 +1,13 @@
+import { NextPage } from "next";
 import { Button } from "ui";
 
-export default function Web() {
+const IndexPage: NextPage = () => {
   return (
     <div>
-      <h1>Web</h1>
+      top page
       <Button />
     </div>
   );
-}
+};
+
+export default IndexPage;
