@@ -9,7 +9,7 @@ const server = fastify({
 
 server.register(require("@fastify/postgres"), {
   connectionString:
-    "postgresql://localhost:5432/postgres?user=postgres&password=password",
+    "postgresql://localhost:5432/develop?user=postgres&password=password",
 });
 server.register(fastifyTRPCPlugin, {
   prefix: "/trpc",
