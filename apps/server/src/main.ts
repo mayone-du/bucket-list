@@ -12,6 +12,10 @@ declare module "fastify" {
   }
 }
 
+// FIXME
+// @ts-ignore
+BigInt.prototype.toJSON = () => this.toString();
+
 const prismaPlugin: FastifyPluginAsync = fp(async (server, options) => {
   const prisma = new PrismaClient();
 
@@ -21,7 +25,17 @@ const prismaPlugin: FastifyPluginAsync = fp(async (server, options) => {
   server.addHook("onClose", async (server) => {
     await server.prisma.$disconnect();
   });
+
+  await server.register(fastifyTRPCPlugin, {
+    prefix: "/trpc",
+    trpcOptions: {
+      router: appRouter,
+      createContext,
+    },
+  });
 });
+
+// export type Context = inferAsyncReturnType<typeof createContext>;
 
 const server = fastify({
   maxParamLength: 5000,
@@ -29,13 +43,13 @@ const server = fastify({
 
 (async () => {
   try {
-    await server.register(require("@fastify/postgres"), {
-      connectionString: "postgresql://user:password@localhost:5432",
-    });
-    await server.register(fastifyTRPCPlugin, {
-      prefix: "/trpc",
-      trpcOptions: { router: appRouter, createContext },
-    });
+    // await server.register(require("@fastify/postgres"), {
+    //   connectionString: "postgresql://user:password@localhost:5432",
+    // });
+    // await server.register(fastifyTRPCPlugin, {
+    //   prefix: "/trpc",
+    //   trpcOptions: { router: appRouter, createContext },
+    // });
     await server.register(require("@fastify/cors"));
     await server.register(prismaPlugin);
     await server.listen({ port: 3001 });

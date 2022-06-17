@@ -1,22 +1,16 @@
 import * as trpc from "@trpc/server";
+import type { Context } from "src/context";
 import { z } from "zod";
 
-type User = {
-  id: string;
-  name: string;
-  bio?: string;
-};
-
-const users: Record<string, User> = {};
-
 export const appRouter = trpc
-  .router()
+  .router<Context>()
   .query("getUserById", {
     input: z.string(),
     resolve: async ({ input, ctx }) => {
-      return (ctx as any).foo;
+      const user = await ctx.prisma.user.findFirst();
+      return user?.id;
       return input;
-      return users[input]; // input type is string
+      // return (ctx as ).user.id;
     },
   })
   .mutation("createUser", {
@@ -26,10 +20,12 @@ export const appRouter = trpc
       bio: z.string().max(142).optional(),
     }),
     resolve: async ({ input, ctx }) => {
-      const id = Date.now().toString();
-      const user: User = { id, ...input };
-      users[user.id] = user;
-      return user;
+      // return await ctx.prisma.user.create({
+      //   data: {
+      //     name: "testUser",
+      //     email: "test@email.com",
+      //   },
+      // });
     },
   });
 

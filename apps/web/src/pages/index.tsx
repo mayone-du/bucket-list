@@ -29,6 +29,7 @@ const IndexPage: NextPage = () => {
     ["getUserById", "aaaaaaa"]
     // { enabled: false }
   );
+  const { mutate } = trpc.useMutation(["createUser"]);
   const { getInputProps, onSubmit } = useForm({
     schema: zodResolver(schema),
     initialValues: {
@@ -38,9 +39,10 @@ const IndexPage: NextPage = () => {
     },
   });
 
+  const handleCreate = () => mutate({ name: "hgoe" });
   const handleFetch = onSubmit(async (data) => {
     console.log(data);
-    await refetch();
+    mutate({ name: "hoge" });
     // await refetch({ queryKey: ["getUserById", data.name] });
   });
 
@@ -49,7 +51,8 @@ const IndexPage: NextPage = () => {
       <div>{data}</div>
       <form onSubmit={handleFetch}>
         <TextInput {...getInputProps("name")} />
-        <Button type="submit">Run Query</Button>
+        <Button onClick={handleCreate}>Run Mutate</Button>
+        {/* <Button type="submit">Run Query</Button> */}
       </form>
       {/* <Button /> */}
       <div>

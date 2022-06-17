@@ -4,7 +4,8 @@
     "build": "tsc -p tsconfig.json",
     "start": "node src/main.js",
     "migrate:dev": "npx prisma migrate dev",
-    "generate:prisma": "npx prisma generate"
+    "generate:prisma": "npx prisma generate",
+    "studio:db": "npx prisma studio"
   },
   "dependencies": {
     "@fastify/cors": "^8.0.0",
