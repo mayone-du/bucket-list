@@ -8,6 +8,7 @@
     "studio:db": "npx prisma studio"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^3.6.2",
     "@fastify/cors": "^8.0.0",
     "@fastify/postgres": "^5.0.0",
     "@prisma/client": "^3.15.2",
