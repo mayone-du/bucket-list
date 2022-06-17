@@ -1,11 +1,13 @@
 import { createReactQueryHooks } from "@trpc/react";
-import type { AppRouter } from "../../server/src/router";
+import type { AppRouter } from "../../../server/src/router";
 
 export const trpc = createReactQueryHooks<AppRouter>();
 
 import type { AppProps } from "next/app";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { MantineProvider } from "@mantine/core";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const [queryClient] = useState(() => new QueryClient());
@@ -25,7 +27,13 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          emotionOptions={{ key: "mantine", prepend: false }}
+        >
+          <Component {...pageProps} />
+        </MantineProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );

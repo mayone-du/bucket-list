@@ -14,6 +14,7 @@ export const appRouter = trpc
   .query("getUserById", {
     input: z.string(),
     resolve: async ({ input, ctx }) => {
+      return input;
       return users[input]; // input type is string
     },
   })
@@ -23,7 +24,7 @@ export const appRouter = trpc
       name: z.string().min(3),
       bio: z.string().max(142).optional(),
     }),
-    async resolve({ input }) {
+    resolve: async ({ input }) => {
       const id = Date.now().toString();
       const user: User = { id, ...input };
       users[user.id] = user;

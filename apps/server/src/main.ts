@@ -7,18 +7,18 @@ const server = fastify({
   maxParamLength: 5000,
 });
 
-server.register(require("@fastify/postgres"), {
-  connectionString:
-    "postgresql://localhost:5432/develop?user=postgres&password=password",
-});
-server.register(fastifyTRPCPlugin, {
-  prefix: "/trpc",
-  trpcOptions: { router: appRouter, createContext },
-});
-
 (async () => {
   try {
-    await server.listen(3001);
+    await server.register(require("@fastify/postgres"), {
+      connectionString:
+        "postgresql://localhost:5432/develop?user=postgres&password=password",
+    });
+    await server.register(fastifyTRPCPlugin, {
+      prefix: "/trpc",
+      trpcOptions: { router: appRouter, createContext },
+    });
+    await server.register(require("@fastify/cors"), {});
+    await server.listen({ port: 3001 });
   } catch (err) {
     server.log.error(err);
     process.exit(1);
