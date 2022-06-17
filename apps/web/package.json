@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently npm:dev:*",
+    "dev:next": "next dev",
     "dev:path": "pathpida --watch",
     "build": "next build",
     "start": "next start",

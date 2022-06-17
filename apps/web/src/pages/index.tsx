@@ -1,11 +1,11 @@
 import { NextPage } from "next";
 import { z } from "zod";
 // import { Button } from "ui";
-import { trpc } from "pages/_app";
-import { TextInput } from "@mantine/core";
+import { trpc } from "src/pages/_app";
+import { Button, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import Link from "next/link";
-import { pagePath } from "lib/$path";
+import { pagesPath } from "src/lib/$path";
 
 // type FieldValues = {
 //   name: string,
@@ -25,11 +25,11 @@ const schema = z.object({
 });
 
 const IndexPage: NextPage = () => {
-  const { data, isLoading, isError } = trpc.useQuery([
-    "getUserById",
-    "inputttttttt",
-  ]);
-  const { getInputProps } = useForm({
+  const { data, isLoading, isError, refetch } = trpc.useQuery(
+    ["getUserById", "aaaaaaa"]
+    // { enabled: false }
+  );
+  const { getInputProps, onSubmit } = useForm({
     schema: zodResolver(schema),
     initialValues: {
       name: "",
@@ -38,13 +38,22 @@ const IndexPage: NextPage = () => {
     },
   });
 
+  const handleFetch = onSubmit(async (data) => {
+    console.log(data);
+    await refetch();
+    // await refetch({ queryKey: ["getUserById", data.name] });
+  });
+
   return (
     <div>
-      <TextInput {...getInputProps("name")} />
-      {data}
+      <div>{data}</div>
+      <form onSubmit={handleFetch}>
+        <TextInput {...getInputProps("name")} />
+        <Button type="submit">Run Query</Button>
+      </form>
       {/* <Button /> */}
       <div>
-        <Link href={pagePath}>link</Link>
+        <Link href={pagesPath.users.$url()}>link</Link>
       </div>
     </div>
   );
